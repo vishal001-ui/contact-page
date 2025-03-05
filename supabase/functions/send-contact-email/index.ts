@@ -32,10 +32,16 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Missing required fields");
     }
 
-    // Send email to portfolio owner
+    // For Resend free tier: Use your own email address as recipient
+    // In Resend free tier, you can only send emails to the email you registered with
+    // OR to email addresses on a verified domain
+    const verifiedEmail = "091ramboy@gmail.com"; // Use the email you registered with Resend
+
+    // Send email to the verified email address
     const emailResponse = await resend.emails.send({
-      from: "B.Tech Portfolio <onboarding@resend.dev>",
-      to: [recipientEmail],
+      from: "Onboarding <onboarding@resend.dev>",
+      to: [verifiedEmail], // Send to your verified email
+      reply_to: email, // Set reply-to as the contact form submitter
       subject: `New Portfolio Contact: ${subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px;">
@@ -47,7 +53,7 @@ const handler = async (req: Request): Promise<Response> => {
             <strong>Message:</strong>
             <p style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">${message}</p>
           </div>
-          <p style="color: #666; font-size: 14px;">This message was sent from your B.Tech Portfolio contact form.</p>
+          <p style="color: #666; font-size: 14px;">This message was sent from your B.Tech Portfolio contact form. The original recipient was: ${recipientEmail}</p>
         </div>
       `,
     });
