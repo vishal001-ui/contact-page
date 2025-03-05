@@ -32,28 +32,28 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Missing required fields");
     }
 
-    // For Resend free tier: Use your own email address as recipient
-    // In Resend free tier, you can only send emails to the email you registered with
-    // OR to email addresses on a verified domain
-    const verifiedEmail = "091ramboy@gmail.com"; // Use the email you registered with Resend
+    // In Resend, we need to use a verified domain for the "from" address
+    // For the free tier, we'll use the default Resend domain
+    // The recipient email should be the one you registered with Resend
+    const verifiedEmail = "091ramboy@gmail.com"; // Your Resend-registered email
 
-    // Send email to the verified email address
+    // Send email using Resend
     const emailResponse = await resend.emails.send({
       from: "Onboarding <onboarding@resend.dev>",
-      to: [verifiedEmail], // Send to your verified email
+      to: [verifiedEmail], // Send to your Resend-verified email
       reply_to: email, // Set reply-to as the contact form submitter
-      subject: `New Portfolio Contact: ${subject}`,
+      subject: `New Contact from ${name}: ${subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eaeaea; border-radius: 5px;">
           <h1 style="color: #333; font-size: 24px; margin-bottom: 20px;">New Contact Form Submission</h1>
           <p style="margin-bottom: 10px;"><strong>Name:</strong> ${name}</p>
-          <p style="margin-bottom: 10px;"><strong>Email:</strong> ${email}</p>
+          <p style="margin-bottom: 10px;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
           <p style="margin-bottom: 10px;"><strong>Subject:</strong> ${subject}</p>
           <div style="margin-bottom: 20px;">
             <strong>Message:</strong>
             <p style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">${message}</p>
           </div>
-          <p style="color: #666; font-size: 14px;">This message was sent from your B.Tech Portfolio contact form. The original recipient was: ${recipientEmail}</p>
+          <p style="color: #666; font-size: 14px;">This message was sent from your B.Tech Portfolio contact form.</p>
         </div>
       `,
     });
