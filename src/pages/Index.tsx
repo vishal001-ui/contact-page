@@ -1,8 +1,7 @@
-
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, GitHub, Code, BookOpen } from "lucide-react";
+import { ArrowRight, Github, Code, BookOpen } from "lucide-react";
 
 const Index = () => {
   useEffect(() => {
@@ -44,7 +43,7 @@ const Index = () => {
           <div className="mt-16 flex justify-center gap-6">
             <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" 
                className="p-3 rounded-full bg-primary/5 text-primary hover:bg-primary/10 transition-all">
-              <GitHub size={24} />
+              <Github size={24} />
             </a>
             <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer"
                className="p-3 rounded-full bg-primary/5 text-primary hover:bg-primary/10 transition-all">
