@@ -1,5 +1,6 @@
 
 import { Link } from "react-router-dom";
+import { Github, Linkedin, Mail } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -9,26 +10,38 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
-            <Link to="/" className="text-xl font-medium tracking-tight">
-              Minimalist
+            <Link to="/" className="text-xl font-bold tracking-tight">
+              B.Tech Portfolio
             </Link>
             <p className="text-sm text-muted-foreground mt-2">
-              Designed with simplicity and elegance in mind.
+              Computer Science & Engineering Student
             </p>
           </div>
           
           <div className="flex space-x-6 md:space-x-10">
             <Link to="/" className="text-sm hover:text-primary transition-all duration-300">Home</Link>
+            <Link to="/projects" className="text-sm hover:text-primary transition-all duration-300">Projects</Link>
+            <Link to="/resume" className="text-sm hover:text-primary transition-all duration-300">Resume</Link>
             <Link to="/contact" className="text-sm hover:text-primary transition-all duration-300">Contact</Link>
           </div>
         </div>
         
-        <div className="border-t border-border/50 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© {currentYear} Minimalist. All rights reserved.</p>
+        <div className="border-t border-border/50 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-muted-foreground">© {currentYear} B.Tech Portfolio. All rights reserved.</p>
           
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-primary transition-all duration-300">Privacy Policy</a>
-            <a href="#" className="hover:text-primary transition-all duration-300">Terms of Service</a>
+          <div className="flex items-center space-x-4 mt-4 md:mt-0">
+            <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" 
+               className="text-muted-foreground hover:text-primary transition-all">
+              <Github size={18} />
+            </a>
+            <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer"
+               className="text-muted-foreground hover:text-primary transition-all">
+              <Linkedin size={18} />
+            </a>
+            <a href="mailto:sunilbishnoi6530@gmail.com" 
+               className="text-muted-foreground hover:text-primary transition-all">
+              <Mail size={18} />
+            </a>
           </div>
         </div>
       </div>

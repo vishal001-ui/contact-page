@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Mail, MessageCircle, SendIcon } from "lucide-react";
+import { Mail, MessageCircle, SendIcon, User, Briefcase } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -42,20 +43,28 @@ const ContactForm = () => {
     setIsSubmitting(true);
     
     try {
-      // In a real application, you would send this data to your backend
-      // This is a simulation of an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Call Supabase Edge Function to send email
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: data.name,
+          email: data.email,
+          subject: data.subject,
+          message: data.message,
+          recipientEmail: "sunilbishnoi6530@gmail.com"
+        }
+      });
       
-      console.log("Form submitted:", data);
+      if (error) throw error;
       
       toast({
-        title: "Message sent",
-        description: "Thank you! We'll get back to you soon.",
+        title: "Message sent successfully!",
+        description: "Thanks for reaching out. I'll get back to you soon.",
         variant: "default",
       });
       
       reset();
     } catch (error) {
+      console.error("Error sending message:", error);
       toast({
         title: "Something went wrong",
         description: "Your message couldn't be sent. Please try again.",
@@ -94,20 +103,7 @@ const ContactForm = () => {
               aria-invalid={errors.name ? "true" : "false"}
             />
             <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                width="16" 
-                height="16" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
-                strokeLinejoin="round"
-              >
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
+              <User size={16} />
             </div>
           </div>
           {errors.name && (
@@ -156,18 +152,23 @@ const ContactForm = () => {
         >
           Subject
         </label>
-        <Input
-          id="subject"
-          type="text"
-          placeholder="What is your message about?"
-          {...register("subject")}
-          className={cn(
-            "h-12 w-full rounded-lg border border-input bg-background",
-            "transition-all focus:form-input-focus",
-            errors.subject && "border-destructive focus:ring-destructive/20"
-          )}
-          aria-invalid={errors.subject ? "true" : "false"}
-        />
+        <div className="relative">
+          <Input
+            id="subject"
+            type="text"
+            placeholder="What is your message about?"
+            {...register("subject")}
+            className={cn(
+              "pl-10 h-12 w-full rounded-lg border border-input bg-background",
+              "transition-all focus:form-input-focus",
+              errors.subject && "border-destructive focus:ring-destructive/20"
+            )}
+            aria-invalid={errors.subject ? "true" : "false"}
+          />
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            <Briefcase size={16} />
+          </div>
+        </div>
         {errors.subject && (
           <p className="text-xs font-medium text-destructive mt-1 animate-slide-down">
             {errors.subject.message}
@@ -185,7 +186,7 @@ const ContactForm = () => {
         <div className="relative">
           <Textarea
             id="message"
-            placeholder="Please describe how we can help you..."
+            placeholder="Please tell me about your project, opportunities, or questions..."
             {...register("message")}
             className={cn(
               "pl-10 min-h-[150px] w-full rounded-lg border border-input bg-background resize-none",
